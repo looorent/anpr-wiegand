@@ -1,7 +1,9 @@
+[![Build Status](https://travis-ci.org/looorent/anpr-weigand.svg?branch=master)](https://travis-ci.org/looorent/anpr-weigand)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/be.looorent/anpr-weigand/badge.svg)](http://search.maven.org/#artifactdetails%7Cbe.looorent%7Canpr-weigand)
+
 # ANPR - Wiegand
 
 This library aims at formatting license plates to the Wiegand format according to the [Nedap Wiegand Interface Module](https://www.nedapidentification.com/products/anpr/wiegand-interface-module/).
-
 
 ## Development constraints
 
