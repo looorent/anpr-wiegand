@@ -1,0 +1,138 @@
+plugins {
+    id "java-library"
+    id "idea"
+    id "groovy"
+    id "io.codearte.nexus-staging" version "0.21.1"
+    id "maven-publish"
+}
+
+group "be.looorent"
+version "0.1.0"
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile (
+            "org.codehaus.groovy:groovy-all:$groovyVersion",
+            "org.junit.jupiter:junit-jupiter-api:$junitVersion",
+            "org.junit.vintage:junit-vintage-engine:$junitVersion",
+            "org.spockframework:spock-core:$spockVersion"
+    )
+}
+
+compileJava {
+    exclude "module-info.java"
+    options.compilerArgs = ["--release", "7"]
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task compileModuleInfoJava(type: JavaCompile) {
+    classpath = files()
+    source = "src/main/java/module-info.java"
+    destinationDir = compileJava.destinationDir
+    doFirst {
+        options.compilerArgs = [
+                "--release", "9",
+                "--module-path", compileJava.classpath.asPath,
+        ]
+    }
+}
+
+compileModuleInfoJava.dependsOn compileJava
+classes.dependsOn compileModuleInfoJava
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+def repoUser = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
+def repoPassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhUser")
+
+if (project.hasProperty("release")) {
+    apply plugin: "signing"
+    apply plugin: "maven"
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        archiveClassifier = "sources"
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        archiveClassifier = "javadoc"
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    jar {
+        manifest {
+            attributes "Implementation-Version": archiveVersion, "provider": gradle
+        }
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: repoUser, password: repoPassword)
+                }
+
+                pom.project {
+                    name project.name
+                    description project.description
+                    packaging "jar"
+                    url "https://github.com/looorent/jflu"
+
+                    scm {
+                        connection "scm:git:https://github.com/looorent/jflu"
+                        developerConnection "scm:git:git@github.com:looorent/jflu.git"
+                        url "https://github.com/looorent/jflu"
+                    }
+
+                    licenses {
+                        license {
+                            name "The MIT License (MIT)"
+                            url "http://opensource.org/licenses/MIT"
+                            distribution "repo"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = "looorent"
+                            name = "Lorent Lempereur"
+                            email = "lorent.lempereur.dev@gmail.com"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+nexusStaging {
+    username = repoUser
+    password = repoPassword
+    packageGroup = "be.looorent"
+}
