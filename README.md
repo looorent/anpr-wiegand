@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/looorent/anpr-weigand.svg?branch=master)](https://travis-ci.org/looorent/anpr-weigand)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/be.looorent/anpr-weigand/badge.svg)](http://search.maven.org/#artifactdetails%7Cbe.looorent%7Canpr-weigand)
+[![Build Status](https://travis-ci.org/looorent/anpr-wiegand.svg?branch=master)](https://travis-ci.org/looorent/anpr-wiegand)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/be.looorent/anpr-wiegand/badge.svg)](http://search.maven.org/#artifactdetails%7Cbe.looorent%7Canpr-wiegand)
 
 # ANPR - Wiegand
 
