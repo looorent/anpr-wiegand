@@ -7,12 +7,13 @@ plugins {
 }
 
 group "be.looorent"
-version "0.1.0"
+version "0.2.0"
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -101,12 +102,12 @@ if (project.hasProperty("release")) {
                     name project.name
                     description project.description
                     packaging "jar"
-                    url "https://github.com/looorent/jflu"
+                    url "https://github.com/looorent/anpr-wiegand"
 
                     scm {
-                        connection "scm:git:https://github.com/looorent/jflu"
-                        developerConnection "scm:git:git@github.com:looorent/jflu.git"
-                        url "https://github.com/looorent/jflu"
+                        connection "scm:git:https://github.com/looorent/anpr-wiegand"
+                        developerConnection "scm:git:git@github.com:looorent/anpr-wiegand.git"
+                        url "https://github.com/looorent/anpr-wiegand"
                     }
 
                     licenses {

@@ -2,21 +2,21 @@ package be.looorent.anpr
 
 import spock.lang.Specification
 
-import static Wiegand.hashTo26Bits
+import static Wiegand26.hash
 
-class WiegandSpec extends Specification {
+class Wiegand26Spec extends Specification {
 
-    def "#to26Bits(null) returns null"() {
+    def "#hash(null) returns null"() {
         when:
-        def hash = hashTo26Bits(null)
+        def hash = hash(null)
 
         then:
         hash == null
     }
 
-    def "#to26Bits(blank) returns null"() {
+    def "#hash(blank) returns null"() {
         when:
-        def hash = hashTo26Bits(blank)
+        def hash = hash(blank)
 
         then:
         hash == null
@@ -28,9 +28,23 @@ class WiegandSpec extends Specification {
         " "   | _
     }
 
-    def "#to26Bits(plate) returns the 26bit hash of this plate"() {
+    def "#hash(very long plate) throws an exception"() {
         when:
-        def hash = hashTo26Bits(plate)
+        hash(veryLongPlate)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        veryLongPlate       | _
+        "azertyuiop0987"    | _
+        "1234567899879825"  | _
+        "nnnnnnnnnnnnnnnn"  | _
+    }
+
+    def "#hash(plate) returns the 26bit hash of this plate"() {
+        when:
+        def hash = hash(plate)
 
         then:
         hash == expectedHash
@@ -48,9 +62,9 @@ class WiegandSpec extends Specification {
         "2ZZD456"    | "2866DD8"
     }
 
-    def "#to26Bits(short plate) returns the 26bit hash of this plate"() {
+    def "#hash(short plate) returns the 26bit hash of this plate"() {
         when:
-        def hash = hashTo26Bits(plate)
+        def hash = hash(plate)
 
         then:
         hash == expectedHash
@@ -67,9 +81,9 @@ class WiegandSpec extends Specification {
         "56"    | "3EB746E"
     }
 
-    def "#to26Bits(plate with spaces and special characters) returns the 26bit hash of this plate"() {
+    def "#hash(plate with spaces and special characters) returns the 26bit hash of this plate"() {
         when:
-        def hash = hashTo26Bits(plate)
+        def hash = hash(plate)
 
         then:
         hash == expectedHash

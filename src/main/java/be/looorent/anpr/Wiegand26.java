@@ -8,26 +8,37 @@ import static java.lang.Integer.bitCount;
 import static java.lang.Integer.toHexString;
 import static java.lang.String.format;
 
+/**
+ * @author Lorent Lempereur
+ */
+public class Wiegand26 {
 
-public class Wiegand {
-
-    private static final int EVEN_PARITY_FIELD = 0x3FFE000; // 11111111111110000000000000
-    private static final int ODD_PARITY_FIELD = 0x1FFF;     // 00000000000001111111111111
-    private static final int EVEN_PARITY_MASK = 0x2000000;  // 10000000000000000000000000
-    private static final int ODD_PARITY_MASK = 0x1;         // 00000000000000000000000001
+    private static final int EVEN_PARITY_FIELD = 0b11111111111110000000000000;
+    private static final int ODD_PARITY_FIELD  = 0b00000000000001111111111111;
+    private static final int EVEN_PARITY_MASK  = 0b10000000000000000000000000;
+    private static final int ODD_PARITY_MASK   = 0b00000000000000000000000001;
     private static final String SHA_ONE = "SHA1";
+    private static final int MAX_NUMBER_OF_CHARACTERS = 10;
 
-    public static String hashTo26Bits(String licensePlate) throws WiegandException {
+    /**
+     * License plates can be converted in a hash in format Wiegand 26-bits (sha1-based).
+     * @param licensePlate must have length &le; 10 characters
+     * @return a lowercase representation in the Wiegand 26bits format (sha1-based) of the provided license plate or null (when the provided license plate is blank or null)
+     * @throws WiegandException when there is no SHA1 algorithm available in <code>java.security.MessageDigest#getInstance(java.lang.String)</code>
+     */
+    public static String hash(String licensePlate) throws WiegandException {
         String sanitized = sanitize(licensePlate);
         if (sanitized == null || sanitized.isEmpty()) {
             return null;
+        } else if (sanitized.length() > MAX_NUMBER_OF_CHARACTERS) {
+            throw new IllegalArgumentException("Wiegang26 does not support license plate containing more than "+MAX_NUMBER_OF_CHARACTERS+" characters: "+sanitized);
+        } else {
+            byte[] shaOne = sha1(sanitized);
+            byte[] lessSignificantBits = lessSignifiant24Bits(shaOne);
+            int bits = moveTo26Bits(useNumericalRepresentation(lessSignificantBits));
+            bits = addParityBits(bits);
+            return toHexadecimal(bits);
         }
-
-        byte[] hash = sha1(sanitized);
-        byte[] lessSignificantBits = lessSignifiant24Bits(hash);
-        int bits = moveTo26Bits(useNumericalRepresentation(lessSignificantBits));
-        bits = addParityBits(bits);
-        return toHexadecimal(bits);
     }
 
     private static int addParityBits(int bits) {

@@ -12,27 +12,28 @@ This library aims at formatting license plates to the Wiegand format according t
 
 ## Supported formats
 
-A single format is supported:
+Two formats are supported:
 
 * Wiegand 26 bits (based on SHA-1)
+* Wiegand 64 bits
 
 ## Getting started
 
 ### Add the JAR to your classpath
 
-Adding the JAR to the classpath allows you to use `be.looorent.anpr.Wiegand`. It is available on _Maven Central_.
+Adding the JAR to the classpath allows you to use `be.looorent.anpr.Wiegand26` and `be.looorent.anpr.Wiegand64`. It is available on _Maven Central_.
 
 To do so, for instance:
 * with Gradle:
 ```groovy
-compile "be.looorent:anpr-wiegand:0.1.0"
+compile "be.looorent:anpr-wiegand:0.2.0"
 ```
 * or with Maven:
 ```xml
 <dependency>
     <groupId>be.looorent</groupId>
     <artifactId>anpr-wiegand</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
