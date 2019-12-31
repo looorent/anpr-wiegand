@@ -58,7 +58,7 @@ publishing {
 }
 
 def repoUser = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
-def repoPassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhUser")
+def repoPassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword")
 
 if (project.hasProperty("release")) {
     apply plugin: "signing"

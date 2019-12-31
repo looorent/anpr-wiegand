@@ -56,6 +56,5 @@ Base on this [great article](https://nemerosa.ghost.io/2015/07/01/publishing-to-
 
 ### Future work
 
-* Support for 64-bits format
 * Javadoc
 
