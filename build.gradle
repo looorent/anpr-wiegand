@@ -1,13 +1,15 @@
 plugins {
-    id "java-library"
     id "idea"
-    id "groovy"
-    id "io.codearte.nexus-staging" version "0.21.1"
+    id "java-library"
     id "maven-publish"
+    id "groovy"
+    id "signing"
+    id "io.codearte.nexus-staging" version "0.30.0"
+    id "com.github.ben-manes.versions" version "0.39.0"
 }
 
 group "be.looorent"
-version "0.2.0"
+version "1.0.0"
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 
@@ -17,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    testCompile (
+    testImplementation (
             "org.codehaus.groovy:groovy-all:$groovyVersion",
             "org.junit.jupiter:junit-jupiter-api:$junitVersion",
             "org.junit.vintage:junit-vintage-engine:$junitVersion",
@@ -46,94 +48,170 @@ task compileModuleInfoJava(type: JavaCompile) {
     }
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 compileModuleInfoJava.dependsOn compileJava
 classes.dependsOn compileModuleInfoJava
 
+def sonatypeUsername = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
+def sonatypePassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword")
+
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
+            artifactId = "anpr-wiegand"
             from components.java
-        }
-    }
-}
-
-def repoUser = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
-def repoPassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword")
-
-if (project.hasProperty("release")) {
-    apply plugin: "signing"
-    apply plugin: "maven"
-
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        archiveClassifier = "sources"
-        from sourceSets.main.allSource
-    }
-
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        archiveClassifier = "javadoc"
-        from javadoc.destinationDir
-    }
-
-    artifacts {
-        archives sourcesJar
-        archives javadocJar
-    }
-
-    jar {
-        manifest {
-            attributes "Implementation-Version": archiveVersion, "provider": gradle
-        }
-    }
-
-    signing {
-        sign configurations.archives
-    }
-
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                    authentication(userName: repoUser, password: repoPassword)
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
                 }
-
-                pom.project {
-                    name project.name
-                    description project.description
-                    packaging "jar"
-                    url "https://github.com/looorent/anpr-wiegand"
-
-                    scm {
-                        connection "scm:git:https://github.com/looorent/anpr-wiegand"
-                        developerConnection "scm:git:git@github.com:looorent/anpr-wiegand.git"
-                        url "https://github.com/looorent/anpr-wiegand"
-                    }
-
-                    licenses {
-                        license {
-                            name "The MIT License (MIT)"
-                            url "http://opensource.org/licenses/MIT"
-                            distribution "repo"
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = "looorent"
-                            name = "Lorent Lempereur"
-                            email = "lorent.lempereur.dev@gmail.com"
-                        }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = project.name
+                description = "Formats license plates to Wiegand formats"
+                url = "https://github.com/looorent/anpr-wiegand"
+                licenses {
+                    license {
+                        name = "The MIT License (MIT)"
+                        url = "http://opensource.org/licenses/MIT"
                     }
                 }
+                developers {
+                    developer {
+                        id = "looorent"
+                        name = "Lorent Lempereur"
+                        email = "lorent.lempereur.dev@gmail.com"
+                    }
+                }
+                scm {
+                    connection = "scm:git:https://github.com/looorent/anpr-wiegand"
+                    developerConnection = "scm:git:git@github.com:looorent/anpr-wiegand.git"
+                    url = "https://github.com/looorent/anpr-wiegand"
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            allowInsecureProtocol=true
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
             }
         }
     }
 }
 
-
-nexusStaging {
-    username = repoUser
-    password = repoPassword
-    packageGroup = "be.looorent"
+signing {
+    sign publishing.publications.mavenJava
 }
+
+javadoc {
+    doFirst {
+        options.addStringOption("Xdoclint:none", "-quiet")
+    }
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption("html5", true)
+    }
+}
+
+
+
+//
+//if (project.hasProperty("release")) {
+//    def sonatypeUsername = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
+//    def sonatypePassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword")
+//
+//    task sourcesJar(type: Jar, dependsOn: classes) {
+//        archiveClassifier = "sources"
+//        from sourceSets.main.allSource
+//    }
+//
+//    task javadocJar(type: Jar, dependsOn: javadoc) {
+//        archiveClassifier = "javadoc"
+//        from javadoc.destinationDir
+//    }
+//
+//    artifacts {
+//        archives sourcesJar
+//        archives javadocJar
+//    }
+//
+//    publishing {
+//        publications {
+//            maven(MavenPublication) {
+//                from components.java
+//            }
+//        }
+//    }
+//
+//    uploadArchives {
+//        repositories {
+//            mavenDeployer {
+//                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//
+//                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+//                    authentication(userName: sonatypeUsername, password: sonatypePassword)
+//                }
+//
+//                pom.project {
+//                    name project.name
+//                    description project.description
+//                    packaging "jar"
+//                    url = "https://www.looorent.com"
+//
+//                    scm {
+//                        connection "scm:git:https://github.com/looorent/anpr-wiegand"
+//                        developerConnection "scm:git:git@github.com:looorent/anpr-wiegand.git"
+//                        url "https://github.com/looorent/anpr-wiegand"
+//                    }
+//
+//                    licenses {
+//                        license {
+//                            name "The MIT License (MIT)"
+//                            url "http://opensource.org/licenses/MIT"
+//                            distribution "repo"
+//                        }
+//                    }
+//
+//                    developers {
+//                        developer {
+//                            id = "looorent"
+//                            name = "Lorent Lempereur"
+//                            email = "lorent.lempereur.dev@gmail.com"
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    signing {
+//        sign configurations.archives
+//    }
+//
+//    javadoc {
+//        doFirst {
+//            options.addStringOption("Xdoclint:none", "-quiet")
+//        }
+//        if(JavaVersion.current().isJava9Compatible()) {
+//            options.addBooleanOption("html5", true)
+//        }
+//    }
+//
+//    nexusStaging {
+//        username = sonatypeUsername
+//        password = sonatypePassword
+//        packageGroup = "be.looorent"
+//    }
+//}

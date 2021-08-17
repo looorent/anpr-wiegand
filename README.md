@@ -26,14 +26,14 @@ Adding the JAR to the classpath allows you to use `be.looorent.anpr.Wiegand26` a
 To do so, for instance:
 * with Gradle:
 ```groovy
-compile "be.looorent:anpr-wiegand:0.2.0"
+compile "be.looorent:anpr-wiegand:1.0.0"
 ```
 * or with Maven:
 ```xml
 <dependency>
     <groupId>be.looorent</groupId>
     <artifactId>anpr-wiegand</artifactId>
-    <version>0.2.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -46,6 +46,8 @@ compile "be.looorent:anpr-wiegand:0.2.0"
 When using _Java Platform Module System_, you must import the module named `anpr.wiegand`.
 
 ## Development
+
+Build with AdoptOpenJDK 11.
 
 ### Release
 

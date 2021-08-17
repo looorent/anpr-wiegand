@@ -28,7 +28,7 @@ public class Wiegand64 {
         if (sanitized == null || sanitized.isEmpty()) {
             return null;
         } else if (sanitized.length() > MAX_NUMBER_OF_CHARACTERS) {
-            throw new IllegalArgumentException("Wiegang64 does not support license plate containing more than "+MAX_NUMBER_OF_CHARACTERS+" characters: "+sanitized);
+            throw new IllegalArgumentException("Wiegand64 does not support license plate containing more than "+MAX_NUMBER_OF_CHARACTERS+" characters: "+sanitized);
         } else {
             long bits = on64Bits(sanitized);
             return toHexString(bits).toUpperCase();
