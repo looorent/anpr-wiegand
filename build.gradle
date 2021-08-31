@@ -4,8 +4,7 @@ plugins {
     id "maven-publish"
     id "groovy"
     id "signing"
-    id "io.codearte.nexus-staging" version "0.30.0"
-    id "com.github.ben-manes.versions" version "0.39.0"
+    id "com.github.ben-manes.versions" version "$outdatedVersion"
 }
 
 group "be.looorent"

@@ -51,9 +51,9 @@ Build with AdoptOpenJDK 11.
 
 ### Release
 
-Base on this [great article](https://nemerosa.ghost.io/2015/07/01/publishing-to-the-maven-central-using-gradle/)
 ```shell
-./gradlew -Prelease uploadArchives closeAndReleaseRepository
+./gradlew build 
+./gradlew publish 
 ```
 
 ### Future work
