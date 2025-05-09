@@ -28,7 +28,6 @@ dependencies {
 
 compileJava {
     exclude "module-info.java"
-    options.compilerArgs = ["--release", "7"]
 }
 
 test {

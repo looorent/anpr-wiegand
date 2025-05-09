@@ -7,7 +7,7 @@ This library aims at formatting license plates to the Wiegand format according t
 
 ## Development constraints
 
-* Support of Java 7
+* Support of Java 8
 * No additional dependency
 
 ## Supported formats
@@ -26,14 +26,14 @@ Adding the JAR to the classpath allows you to use `be.looorent.anpr.Wiegand26` a
 To do so, for instance:
 * with Gradle:
 ```groovy
-compile "be.looorent:anpr-wiegand:1.0.0"
+compile "be.looorent:anpr-wiegand:1.0.1"
 ```
 * or with Maven:
 ```xml
 <dependency>
     <groupId>be.looorent</groupId>
     <artifactId>anpr-wiegand</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -47,7 +47,7 @@ When using _Java Platform Module System_, you must import the module named `anpr
 
 ## Development
 
-Build with AdoptOpenJDK 11.
+Build with AdoptOpenJDK 21.
 
 ### Release
 
@@ -55,8 +55,4 @@ Build with AdoptOpenJDK 11.
 ./gradlew build 
 ./gradlew publish 
 ```
-
-### Future work
-
-* Javadoc
 
