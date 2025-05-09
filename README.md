@@ -53,6 +53,9 @@ Build with AdoptOpenJDK 21.
 
 ```shell
 ./gradlew build 
-./gradlew publish 
+./gradlew jreleaserConfig
+./gradlew clean
+./gradlew publish
+./gradlew jreleaserFullRelease
 ```
 

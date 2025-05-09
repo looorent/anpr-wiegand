@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.1] - 2025-05-09
 
 * Remove support of Java 7
+* Publish on Maven Central not through Nexus 2 anymore
+* Use JReleaser to publish on Maven Central
 
 ## [1.0.0] - 2021-08-17
 

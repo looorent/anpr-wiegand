@@ -3,8 +3,8 @@ plugins {
     id "java-library"
     id "maven-publish"
     id "groovy"
-    id "signing"
     id "com.github.ben-manes.versions" version "$outdatedVersion"
+    id "org.jreleaser" version "$jReleaserVersion"
 }
 
 group "be.looorent"
@@ -98,20 +98,27 @@ publishing {
 
     repositories {
         maven {
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-            url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
-            allowInsecureProtocol=true
-            credentials {
-                username sonatypeUsername
-                password sonatypePassword
-            }
+            url = layout.buildDirectory.dir('staging-deploy')
         }
     }
 }
 
-signing {
-    sign publishing.publications.mavenJava
+jreleaser {
+    signing {
+        active = "ALWAYS"
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = "ALWAYS"
+                    url = "https://central.sonatype.com/api/v1/publisher"
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+        }
+    }
 }
 
 javadoc {
