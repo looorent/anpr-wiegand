@@ -10,7 +10,7 @@ import static be.looorent.anpr.Wiegand26.readIdNumberFrom
 
 class Wiegand26Spec extends Specification {
 
-    def "#hash(null) returns null"() {
+    def "hash(null) returns null"() {
         when:
         def hash = hash(null)
 
@@ -18,7 +18,7 @@ class Wiegand26Spec extends Specification {
         hash == null
     }
 
-    def "#hash(blank) returns null"() {
+    def "hash(blank) returns null"() {
         when:
         def hash = hash(blank)
 
@@ -32,7 +32,7 @@ class Wiegand26Spec extends Specification {
         " "   | _
     }
 
-    def "#hash(very long plate) throws an exception"() {
+    def "hash(very long plate) throws an exception"() {
         when:
         hash(veryLongPlate)
 
@@ -46,7 +46,7 @@ class Wiegand26Spec extends Specification {
         "nnnnnnnnnnnnnnnn"  | _
     }
 
-    def "#hash(plate) returns the 26bit hash of this plate"() {
+    def "hash(plate) returns the 26bit hash of this plate"() {
         when:
         def hash = hash(plate)
 
@@ -66,7 +66,7 @@ class Wiegand26Spec extends Specification {
         "2ZZD456"    | "2866DD8"
     }
 
-    def "#hash(short plate) returns the 26bit hash of this plate"() {
+    def "hash(short plate) returns the 26bit hash of this plate"() {
         when:
         def hash = hash(plate)
 
@@ -85,7 +85,7 @@ class Wiegand26Spec extends Specification {
         "56"    | "3EB746E"
     }
 
-    def "#hash(plate with spaces and special characters) returns the 26bit hash of this plate"() {
+    def "hash(plate with spaces and special characters) returns the 26bit hash of this plate"() {
         when:
         def hash = hash(plate)
 
@@ -109,7 +109,7 @@ class Wiegand26Spec extends Specification {
         "2ZZD4;;..56" | "2866DD8"
     }
 
-    def "#readFacilityCodeFrom(null or blank) throws an exception"() {
+    def "readFacilityCodeFrom(null or blank) throws an exception"() {
         when:
         readFacilityCodeFrom(wrongInput)
 
@@ -122,7 +122,7 @@ class Wiegand26Spec extends Specification {
         ""         | _
     }
 
-    def "#readFacilityCodeFrom(a valid wiegand26 hex) returns the facility code"() {
+    def "readFacilityCodeFrom(a valid wiegand26 hex) returns the facility code"() {
         when:
         def facilityCode = readFacilityCodeFrom(input)
 
@@ -138,7 +138,7 @@ class Wiegand26Spec extends Specification {
         "1A98B4B"     | 212
     }
 
-    def "#readIdNumberFrom(null or blank) throws an exception"() {
+    def "readIdNumberFrom(null or blank) throws an exception"() {
         when:
         readIdNumberFrom(wrongInput)
 
@@ -151,7 +151,7 @@ class Wiegand26Spec extends Specification {
         ""         | _
     }
 
-    def "#readIdNumberFrom(a valid wiegand26 hex) returns the facility code"() {
+    def "readIdNumberFrom(a valid wiegand26 hex) returns the facility code"() {
         when:
         def idNumber = readIdNumberFrom(input)
 
@@ -167,7 +167,7 @@ class Wiegand26Spec extends Specification {
         "1A98B4B"     | 50597
     }
 
-    def "#readDecimalPayload(null or blank) throws an exception"() {
+    def "readDecimalPayload(null or blank) throws an exception"() {
         when:
         readDecimalPayload(wrongInput)
 
@@ -180,7 +180,7 @@ class Wiegand26Spec extends Specification {
         ""         | _
     }
 
-    def "#readDecimalPayload(a valid wiegand26 hex) returns the facility code"() {
+    def "readDecimalPayload(a valid wiegand26 hex) returns the facility code"() {
         when:
         def payload = readDecimalPayload(input)
 
@@ -196,7 +196,7 @@ class Wiegand26Spec extends Specification {
         "1A98B4B"     | 13944229
     }
 
-    def "#readConcatenationOfFacilityCodeAndIdNumber(null or blank) throws an exception"() {
+    def "readConcatenationOfFacilityCodeAndIdNumber(null or blank) throws an exception"() {
         when:
         readConcatenationOfFacilityCodeAndIdNumber(wrongInput)
 
@@ -209,7 +209,7 @@ class Wiegand26Spec extends Specification {
         ""         | _
     }
 
-    def "#readConcatenationOfFacilityCodeAndIdNumber(a valid wiegand26 hex) returns the facility code"() {
+    def "readConcatenationOfFacilityCodeAndIdNumber(a valid wiegand26 hex) returns the facility code"() {
         when:
         def concatenation = readConcatenationOfFacilityCodeAndIdNumber(input)
 

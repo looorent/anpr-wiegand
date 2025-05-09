@@ -8,9 +8,9 @@ plugins {
 }
 
 group "be.looorent"
-version "1.0.0"
+version "1.0.1"
 
-sourceCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()

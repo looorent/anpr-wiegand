@@ -7,7 +7,7 @@ import static be.looorent.anpr.Wiegand26.hash
 
 class Wiegand64Spec extends Specification {
 
-    def "#transform(null) returns null"() {
+    def "transform(null) returns null"() {
         when:
         def hash = transform(null)
 
@@ -15,7 +15,7 @@ class Wiegand64Spec extends Specification {
         hash == null
     }
 
-    def "#transform(blank) returns null"() {
+    def "transform(blank) returns null"() {
         when:
         def hash = transform(blank)
 
@@ -29,7 +29,7 @@ class Wiegand64Spec extends Specification {
         " "   | _
     }
 
-    def "#transform(plate) returns the 64bits mapping of this plate"() {
+    def "transform(plate) returns the 64bits mapping of this plate"() {
         when:
         def hash = transform(plate)
 
@@ -53,7 +53,7 @@ class Wiegand64Spec extends Specification {
     }
 
 
-    def "#transform(very long plate) throws an exception"() {
+    def "transform(very long plate) throws an exception"() {
         when:
         hash(veryLongPlate)
 
@@ -67,7 +67,7 @@ class Wiegand64Spec extends Specification {
         "nnnnnnnnnnnnnnnn"  | _
     }
 
-    def "#transform(short plate) returns the 64bits mapping of this plate"() {
+    def "transform(short plate) returns the 64bits mapping of this plate"() {
         when:
         def hash = transform(plate)
 
@@ -92,7 +92,7 @@ class Wiegand64Spec extends Specification {
 
     }
 
-    def "#transform(plate with spaces and special characters) returns the 64 bits hash of this plate"() {
+    def "transform(plate with spaces and special characters) returns the 64 bits hash of this plate"() {
         when:
         def hash = transform(plate)
 
